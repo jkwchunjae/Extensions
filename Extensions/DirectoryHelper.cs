@@ -9,10 +9,10 @@ namespace Extensions
 {
 	public class DirInfo
 	{
-		string _path;
-		List<DirInfo> _dirList = new List<DirInfo>();
-		List<FileInfo> _fileList = new List<FileInfo>();
-		DefaultDictionary<string, DirInfo> _dirMap = new DefaultDictionary<string, DirInfo>();
+		protected string _path;
+		protected List<DirInfo> _dirList = new List<DirInfo>();
+		protected List<FileInfo> _fileList = new List<FileInfo>();
+		protected DefaultDictionary<string, DirInfo> _dirMap = new DefaultDictionary<string, DirInfo>();
 
 		public DirInfo(string path)
 		{
@@ -33,7 +33,12 @@ namespace Extensions
 			}
 		}
 
-		public IEnumerable<DirInfo> GetDirPaths()
+		public string FolderName
+		{
+			get { return Path.GetFileName(_path); }
+		}
+
+		public IEnumerable<DirInfo> GetSubDirList()
 		{
 			return _dirList;
 		}
