@@ -8,7 +8,7 @@ namespace Extensions
 {
 	public static class ConsoleHelper
 	{
-		public static void Dump(this object obj)
+		public static void ConsoleWriteLine(this object obj)
 		{
 			Console.WriteLine(obj);
 		}
