@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Extensions
@@ -21,6 +22,11 @@ namespace Extensions
 		public static string StringJoin(this IEnumerable<string> strs, string left, string separator, string right)
 		{
 			return "{0}{1}{2}".With(left, strs.StringJoin(separator), right);
+		}
+
+		public static string RegexReplace(this string input, string pattern, string replacement)
+		{
+			return Regex.Replace(input, pattern, replacement);
 		}
 	}
 }
