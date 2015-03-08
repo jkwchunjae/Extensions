@@ -26,6 +26,7 @@ namespace Extensions
 
 		public static string RegexReplace(this string input, string pattern, string replacement)
 		{
+			if (input == null) return null;
 			return Regex.Replace(input, pattern, replacement);
 		}
 	}
