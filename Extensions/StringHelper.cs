@@ -29,5 +29,13 @@ namespace Extensions
 			if (input == null) return null;
 			return Regex.Replace(input, pattern, replacement);
 		}
+
+		public static int ToInt(this string value, int defaultValue = 0)
+		{
+			var result = defaultValue;
+			int.TryParse(value, out result);
+			return result;
+		}
+
 	}
 }
