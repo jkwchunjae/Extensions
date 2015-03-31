@@ -14,6 +14,11 @@ namespace Extensions
 			Log(format.With(param));
 		}
 
+		public static void Log<T>(string format, T arg) where T: class
+		{
+			Log(format.WithVar(arg));
+		}
+
 		public static void Log(Exception ex)
 		{
 			while (true)
