@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Extensions
 {
-	public static class IntHelper
+	public static class NumberHelper
 	{
 		public static string ToComma(this int value)
 		{
