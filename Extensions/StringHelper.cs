@@ -71,5 +71,10 @@ namespace Extensions
 			return result;
 		}
 
+		static MarkdownSharp.Markdown _markdown = new MarkdownSharp.Markdown();
+		public static string ToHtml(this string text)
+		{
+			return _markdown.Transform(text);
+		}
 	}
 }

@@ -43,8 +43,10 @@
     <Compile Include="ArgumentHelper.cs" />
     <Compile Include="ConsoleHelper.cs" />
     <Compile Include="ConvertHelper.cs" />
+    <Compile Include="DateTimeHelper.cs" />
     <Compile Include="DictionaryHelper.cs" />
     <Compile Include="DirectoryHelper.cs" />
+    <Compile Include="Markdown.cs" />
     <Compile Include="NumberHelper.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
