@@ -46,6 +46,7 @@
     <Compile Include="DateTimeHelper.cs" />
     <Compile Include="DictionaryHelper.cs" />
     <Compile Include="DirectoryHelper.cs" />
+    <Compile Include="IEnumerableHelper.cs" />
     <Compile Include="Markdown.cs" />
     <Compile Include="NumberHelper.cs" />
     <Compile Include="Logger.cs" />
