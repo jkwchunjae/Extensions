@@ -76,5 +76,11 @@ namespace Extensions
 		{
 			return _markdown.Transform(text);
 		}
+
+		public static string GetFirstParagraph(this string html)
+		{
+			var lastP = html.IndexOf(@"</p>");
+			return html.Substring(0, lastP + 4);
+		}
 	}
 }
