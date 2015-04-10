@@ -70,17 +70,5 @@ namespace Extensions
 			int.TryParse(value, out result);
 			return result;
 		}
-
-		static MarkdownSharp.Markdown _markdown = new MarkdownSharp.Markdown();
-		public static string ToHtml(this string text)
-		{
-			return _markdown.Transform(text);
-		}
-
-		public static string GetFirstParagraph(this string html)
-		{
-			var lastP = html.IndexOf(@"</p>");
-			return html.Substring(0, lastP + 4);
-		}
 	}
 }
