@@ -923,7 +923,7 @@ namespace MarkdownSharp
 				result += string.Format(" title=\"{0}\"", title);
 			}
 
-			result += string.Format(">{0}</a>", linkText);
+			result += string.Format(@" target=""blank"">{0}</a>", linkText);
 			return result;
 		}
 
