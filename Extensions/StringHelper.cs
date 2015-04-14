@@ -70,5 +70,11 @@ namespace Extensions
 			int.TryParse(value, out result);
 			return result;
 		}
+
+		public static bool IsInt(this string value)
+		{
+			var result = 0;
+			return int.TryParse(value, out result);
+		}
 	}
 }
