@@ -76,5 +76,10 @@ namespace Extensions
 			var result = 0;
 			return int.TryParse(value, out result);
 		}
+
+		public static bool ToBoolean(this string value, bool defaultValue = false)
+		{
+			return value.ToLower() == "true";
+		}
 	}
 }
