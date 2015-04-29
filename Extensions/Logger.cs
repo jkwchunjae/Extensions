@@ -44,7 +44,10 @@ namespace Extensions
 				string filePath = "Log/{0}".With(fileName);
 				if (!Directory.Exists("Log"))
 					Directory.CreateDirectory("Log");
+#if (DEBUG)
+#else
 				File.AppendAllText(filePath, result + Environment.NewLine, Encoding.UTF8);
+#endif
 			}
 			catch (Exception ex)
 			{
