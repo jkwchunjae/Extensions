@@ -12,6 +12,11 @@ namespace Extensions
 		{
 			return "{0:#,#}".With(value);
 		}
+
+		public static double Round(this double value, int digits)
+		{
+			return Math.Round(value, digits);
+		}
 	}
 
 	public static class StaticRandom
