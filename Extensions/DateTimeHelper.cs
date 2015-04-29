@@ -28,6 +28,21 @@ namespace Extensions
 			return date.ToDate().AddDays(days).ToInt();
 		}
 
+		public static int AddWeeks(this int date, int weeks)
+		{
+			return date.AddDays(7 * weeks);
+		}
+
+		public static int AddMonths(this int date, int months)
+		{
+			return date.ToDate().AddMonths(months).ToInt();
+		}
+
+		public static int AddYears(this int date, int years)
+		{
+			return date.ToDate().AddYears(years).ToInt();
+		}
+
 		public static int Year(this int date)
 		{
 			return date / 10000;
