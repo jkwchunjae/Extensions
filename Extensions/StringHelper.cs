@@ -64,6 +64,20 @@ namespace Extensions
 			return Regex.Replace(input, pattern, replacement);
 		}
 
+		public static string Left(this string value, int length = 1)
+		{
+			if (value.Length < length)
+				return value;
+			return value.Substring(0, length);
+		}
+
+		public static string Right(this string value, int length = 1)
+		{
+			if (value.Length < length)
+				return value;
+			return value.Substring(value.Length - length, length);
+		}
+
 		public static int ToInt(this string value, int defaultValue = 0)
 		{
 			var result = defaultValue;
@@ -75,6 +89,13 @@ namespace Extensions
 		{
 			var result = 0;
 			return int.TryParse(value, out result);
+		}
+
+		public static double ToDouble(this string value, double defaultValue = 0)
+		{
+			var result = defaultValue;
+			double.TryParse(value, out result);
+			return result;
 		}
 
 		public static bool ToBoolean(this string value, bool defaultValue = false)
