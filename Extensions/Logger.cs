@@ -9,6 +9,11 @@ namespace Extensions
 {
 	public static class Logger
 	{
+		public static void Dump(this string value)
+		{
+			Console.WriteLine(value);
+		}
+
 		public static void Log(string format, params object[] param)
 		{
 			Log(format.With(param));
