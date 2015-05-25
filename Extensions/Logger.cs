@@ -9,7 +9,7 @@ namespace Extensions
 {
 	public static class Logger
 	{
-		public static void Dump(this string value)
+		public static void Dump(this object value)
 		{
 			Console.WriteLine(value);
 		}
