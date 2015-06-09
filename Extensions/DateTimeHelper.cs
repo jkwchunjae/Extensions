@@ -69,5 +69,17 @@ namespace Extensions
 				fromDate = fromDate.AddDays(step);
 			}
 		}
+
+		public static int GetDate(this int date)
+		{
+			if (date < 20000000)
+				return DateTime.Today.AddDays(date).ToInt();
+			return date;
+		}
+
+		public static bool IsBetween(this int date, int beginDate, int endDate)
+		{
+			return date >= beginDate && date <= endDate;
+		}
 	}
 }
