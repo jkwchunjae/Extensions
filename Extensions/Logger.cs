@@ -47,10 +47,10 @@ namespace Extensions
 
 				string fileName = "{0}.log".With(DateTime.Now.ToString("yyyy_MM_dd"));
 				string filePath = "Log/{0}".With(fileName);
-				if (!Directory.Exists("Log"))
-					Directory.CreateDirectory("Log");
 #if (DEBUG)
 #else
+				if (!Directory.Exists("Log"))
+					Directory.CreateDirectory("Log");
 				File.AppendAllText(filePath, result + Environment.NewLine, Encoding.UTF8);
 #endif
 			}
