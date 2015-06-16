@@ -9,6 +9,9 @@ namespace Extensions
 {
 	public static class Logger
 	{
+		static DateTime _lastWriteTime = DateTime.Now;
+		static StringBuilder _logBuffer = new StringBuilder();
+
 		public static void Dump(this object value)
 		{
 			Console.WriteLine(value);
@@ -49,9 +52,18 @@ namespace Extensions
 				string filePath = "Log/{0}".With(fileName);
 #if (DEBUG)
 #else
-				if (!Directory.Exists("Log"))
-					Directory.CreateDirectory("Log");
-				File.AppendAllText(filePath, result + Environment.NewLine, Encoding.UTF8);
+				lock (_logBuffer)
+				{
+					if (!Directory.Exists("Log"))
+						Directory.CreateDirectory("Log");
+
+					_logBuffer.AppendLine(result);
+					if (DateTime.Now.Subtract(_lastWriteTime).TotalMinutes > 10.0)
+					{
+						File.AppendAllText(filePath, _logBuffer.ToString(), Encoding.UTF8);
+						_logBuffer.Clear();
+					}
+				}
 #endif
 			}
 			catch (Exception ex)
