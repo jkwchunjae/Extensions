@@ -12,9 +12,16 @@ namespace Extensions
 		static DateTime _lastWriteTime = DateTime.Now.AddDays(-10);
 		static StringBuilder _logBuffer = new StringBuilder();
 
-		public static void Dump(this object value)
+		public static void Dump(this object value, string name = "")
 		{
-			Console.WriteLine(value);
+			if (name == "")
+			{
+				Console.WriteLine(value);
+			}
+			else
+			{
+				Console.WriteLine(name + ": " + value);
+			}
 		}
 
 		public static void Log(string format, params object[] param)
