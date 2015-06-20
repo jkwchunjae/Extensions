@@ -9,7 +9,7 @@ namespace Extensions
 {
 	public static class Logger
 	{
-		static DateTime _lastWriteTime = DateTime.Now;
+		static DateTime _lastWriteTime = DateTime.Now.AddDays(-10);
 		static StringBuilder _logBuffer = new StringBuilder();
 
 		public static void Dump(this object value)
@@ -36,6 +36,7 @@ namespace Extensions
 				Log(ex.Message);
 				Log(ex.Source);
 				Log(ex.StackTrace);
+				ex = ex.InnerException;
 			}
 		}
 
