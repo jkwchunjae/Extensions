@@ -26,7 +26,10 @@ namespace Extensions
 
 		public static void Log(string format, params object[] param)
 		{
-			Log(format.With(param));
+			if (param.Count() > 0)
+				Log(format.With(param));
+			else
+				Log(format);
 		}
 
 		public static void Log<T>(string format, T arg) where T: class
