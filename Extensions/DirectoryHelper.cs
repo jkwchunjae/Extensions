@@ -56,6 +56,11 @@ namespace Extensions
 
 	public static class DirectoryHelper
 	{
+		public static string ReplaceToSlash(this string path)
+		{
+			return path.Replace('\\', '/');
+		}
+
 		public static DirInfo CreateDirInfo(this string path)
 		{
 			return new DirInfo(path);
