@@ -9,7 +9,7 @@ namespace Extensions
 {
 	public static class Logger
 	{
-		static DateTime _lastWriteTime = DateTime.Now.AddDays(-10);
+		static DateTime _lastWriteTime = DateTime.Now.AddMinutes(-10);
 		static StringBuilder _logBuffer = new StringBuilder();
 
 		public static void Dump(this object value, string name = "")
@@ -73,6 +73,7 @@ namespace Extensions
 					{
 						File.AppendAllText(filePath, _logBuffer.ToString(), Encoding.UTF8);
 						_logBuffer.Clear();
+						_lastWriteTime = DateTime.Now;
 					}
 				}
 #endif
