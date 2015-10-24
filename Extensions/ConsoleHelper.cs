@@ -12,5 +12,16 @@ namespace Extensions
 		{
 			Console.WriteLine(obj);
 		}
+
+		public static string ReadInput(string message)
+		{
+			Console.Write(message + ": ");
+			return Console.ReadLine();
+		}
+		
+		public static void Dump(this string str)
+		{
+			Console.WriteLine(str);
+		}
 	}
 }
