@@ -54,7 +54,7 @@ namespace Extensions
 		{
 			try
 			{
-				string timestamp = DateTime.Now.ToString("[MM-dd HH:mm:ss] ");
+				string timestamp = DateTime.Now.ToString("[yyyy-MM-dd HH:mm:ss] ");
 				string result = timestamp + message.Replace("\r", "").Split('\n').Select((e, i) => (i > 0 ? "\t\t" : "") + e).StringJoin(Environment.NewLine);
 
 				Console.WriteLine(result);
