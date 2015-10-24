@@ -18,10 +18,24 @@ namespace Extensions
 			Console.Write(message + ": ");
 			return Console.ReadLine();
 		}
-		
-		public static void Dump(this string str)
+
+		public static void Dump(this object value, string title = "")
 		{
-			Console.WriteLine(str);
+			if (title == "")
+			{
+				Console.WriteLine(value);
+			}
+			else
+			{
+				Console.WriteLine(title + ": " + value);
+			}
+		}
+
+		public static void Dump(this IEnumerable<string> strList, string title = "")
+		{
+			title.Dump();
+			foreach (var tuple in strList.Select((x, i) => Tuple.Create(x, i)))
+				"[{1}] {0}".With(tuple.Item1, tuple.Item2).Dump();
 		}
 	}
 }
