@@ -81,7 +81,8 @@ namespace Extensions
 		public static int ToInt(this string value, int defaultValue = 0)
 		{
 			var result = defaultValue;
-			int.TryParse(value, out result);
+			if (!int.TryParse(value, out result))
+				return defaultValue;
 			return result;
 		}
 
@@ -94,7 +95,8 @@ namespace Extensions
 		public static double ToDouble(this string value, double defaultValue = 0)
 		{
 			var result = defaultValue;
-			double.TryParse(value, out result);
+			if (!double.TryParse(value, out result))
+				return defaultValue;
 			return result;
 		}
 
