@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Reflection;
 
 namespace Extensions
 {
@@ -22,13 +23,33 @@ namespace Extensions
 		public bool IsVarchar;
 		public bool IsNull;
 		public int VarcharLength;
+
+		public string SqlType
+		{
+			get
+			{
+				return IsVarchar ? "NVARCHAR({0})".With(VarcharLength) : Type;
+			}
+		}
 	}
 
 	public static class DatabaseHelper
 	{
+		static Dictionary<string, string> _typeDic = new Dictionary<string, string>()
+		{
+			{"int32", "INT"},
+			{"int64", "BIGINT"},
+			{"double", "DOUBLE"},
+			{"string", "NVARCHAR"},
+			{"datetime", "DATETIME"},
+		};
 
 		public static string ToDatabaseType(this string type)
 		{
+			if (_typeDic.ContainsKey(type.ToLower()))
+				return _typeDic[type.ToLower()];
+			return type.ToUpper();
+
 			var lowerType = type.ToLower();
 			if (lowerType == "int32") return "int";
 			if (lowerType == "int64") return "bigint";
@@ -66,35 +87,43 @@ namespace Extensions
 		public static string CreateTableQuery(this Table table)
 		{
 			var queryBuilder = new StringBuilder();
-			queryBuilder.Append(string.Format("CREATE TABLE {0}", table.Name) + Environment.NewLine);
-			queryBuilder.Append("(" + Environment.NewLine);
-			foreach (var elem in table.ColumnList)
+			queryBuilder.AppendLine("CREATE TABLE `{0}`".With(table.Name));
+			queryBuilder.AppendLine("(");
+			foreach (var column in table.ColumnList)
 			{
-				queryBuilder.Append(
-					string.Format("\t{0} {1}{2}{3}{4}{5}",
+				queryBuilder.AppendLine(
+					"\t`{ColumnName}` {Type} {Null} {AutoInc},".WithVar(new
+					{
+						ColumnName = column.Name,
+						Type = column.SqlType,
+						Null = column.IsNull ? "NULL" : "NOT NULL",
+						AutoInc = column.IsAutoIncrementKey ? "AUTO_INCREMENT" : "",
+					}));
+					/*
 						elem.Name,
-						elem.IsVarchar ? string.Format("nvarchar({0})", elem.VarcharLength) : elem.Type,
+						elem.IsVarchar ? "NVARCHAR({0})".With(elem.VarcharLength) : elem.Type,
 						elem.IsNull ? " NULL " : " NOT NULL ",
 						elem.IsAutoIncrementKey ? " AUTO_INCREMENT " : "",
 						",",
 						Environment.NewLine));
+				*/
 			}
 			if (table.ColumnList.Where(e => e.IsKey).Count() > 0)
 			{
-				queryBuilder.Append(string.Format("\tPRIMARY KEY ({0})",
-					string.Join(", ", table.ColumnList.Where(e => e.IsKey).Select(e => e.Name))));
+				queryBuilder.AppendLine(string.Format("\tPRIMARY KEY ({0})",
+					table.ColumnList.Where(e => e.IsKey).Select(e => "`{0}`".With(e.Name)).StringJoin(", ")));
 			}
 
 			foreach (var elem in table.ColumnList.Where(e => e.IsIndex))
 			{
-				queryBuilder.Append(
+				queryBuilder.AppendLine(
 					string.Format(",{0}\tINDEX Index_{1}_{2} ({2})",
 						Environment.NewLine,
 						table.Name,
 						elem.Name));
 			}
 
-			queryBuilder.Append(Environment.NewLine + ")" + Environment.NewLine);
+			queryBuilder.AppendLine(Environment.NewLine + ")");
 
 			return queryBuilder.ToString();
 		}
