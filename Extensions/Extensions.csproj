@@ -42,8 +42,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ArgumentHelper.cs" />
+    <Compile Include="AttributeHelper.cs" />
     <Compile Include="ConsoleHelper.cs" />
     <Compile Include="ConvertHelper.cs" />
+    <Compile Include="DatabaseAttribute.cs" />
+    <Compile Include="DatabaseHelper.cs" />
     <Compile Include="DateTimeHelper.cs" />
     <Compile Include="DictionaryHelper.cs" />
     <Compile Include="DirectoryHelper.cs" />
