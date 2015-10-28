@@ -19,7 +19,7 @@ namespace Extensions
 			return Console.ReadLine();
 		}
 
-		public static void Dump<T>(this T value, string title = "")
+		public static void Dump(this string value, string title = "")
 		{
 			if (title == "")
 			{
