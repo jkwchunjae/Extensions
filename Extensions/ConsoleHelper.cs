@@ -19,7 +19,7 @@ namespace Extensions
 			return Console.ReadLine();
 		}
 
-		public static void Dump(this object value, string title = "")
+		public static void Dump<T>(this T value, string title = "")
 		{
 			if (title == "")
 			{
@@ -35,6 +35,13 @@ namespace Extensions
 		{
 			title.Dump();
 			foreach (var tuple in strList.Select((x, i) => Tuple.Create(x, i)))
+				"[{1}] {0}".With(tuple.Item1, tuple.Item2).Dump();
+		}
+
+		public static void Dump<T>(this IEnumerable<T> objList) where T : IGetString
+		{
+			typeof(T).Name.Dump();
+			foreach (var tuple in objList.Select((x, i) => Tuple.Create(x.GetString(), i)))
 				"[{1}] {0}".With(tuple.Item1, tuple.Item2).Dump();
 		}
 	}
