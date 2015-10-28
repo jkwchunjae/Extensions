@@ -8,6 +8,13 @@ namespace Extensions
 {
 	public class IndexAttribute : Attribute
 	{
+		public int IndexId;
+		public int IndexOrder;
+		public IndexAttribute(int indexId, int indexOrder)
+		{
+			IndexId = indexId;
+			IndexOrder = indexOrder;
+		}
 	}
 
 	public class KeyAttribute : Attribute
