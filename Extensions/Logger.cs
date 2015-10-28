@@ -12,6 +12,16 @@ namespace Extensions
 		static DateTime _lastWriteTime = DateTime.Now.AddMinutes(-10);
 		static StringBuilder _logBuffer = new StringBuilder();
 
+		public static void WriteLog(this string format, params object[] param)
+		{
+			Log(format, param);
+		}
+
+		public static void WriteLog(this Exception ex)
+		{
+			Log(ex);
+		}
+
 		public static void Log(string format, params object[] param)
 		{
 			if (param.Count() > 0)
