@@ -23,6 +23,8 @@ namespace Extensions
 		public bool IsVarchar;
 		public bool IsNull;
 		public int VarcharLength;
+		public int IndexId;
+		public int IndexOrder;
 
 		public string SqlType
 		{
@@ -49,24 +51,20 @@ namespace Extensions
 			if (_typeDic.ContainsKey(type.ToLower()))
 				return _typeDic[type.ToLower()];
 			return type.ToUpper();
-
-			var lowerType = type.ToLower();
-			if (lowerType == "int32") return "int";
-			if (lowerType == "int64") return "bigint";
-			if (lowerType == "double") return "float";
-			if (lowerType == "string") return "text";
-			if (lowerType == "datetime") return "datetime";
-
-			return type.ToLower();
 		}
 
 		public static Table ToDatabaseTable<T>()
 		{
 			var typeInfo = typeof(T);
+			return ToDatabaseTable(typeInfo);
+		}
+
+		public static Table ToDatabaseTable(Type typeInfo)
+		{
 			if (!typeInfo.HasAttribute<TableAttribute>())
 				return null;
 
-			var table = new Table { Name = typeInfo.Name };
+			var table = new Table { Name = typeInfo.GetAttribute<TableAttribute>() != null ? typeInfo.GetAttribute<TableAttribute>().TableName : typeInfo.Name };
 			foreach (var member in typeInfo.GetFields())
 			{
 				table.ColumnList.Add(new Column()
@@ -78,7 +76,9 @@ namespace Extensions
 					IsIndex = member.HasAttribute<IndexAttribute>(),
 					IsVarchar = member.HasAttribute<VarcharAttribute>(),
 					IsNull = member.HasAttribute<IsNullAttribute>(),
-					VarcharLength = member.HasAttribute<VarcharAttribute>() ? member.GetAttribute<VarcharAttribute>().Length : 0,
+					VarcharLength = member.GetAttribute<VarcharAttribute>() != null ? member.GetAttribute<VarcharAttribute>().Length : 0,
+					IndexId = member.HasAttribute<IndexAttribute>() ? member.GetAttribute<IndexAttribute>().IndexId : 0,
+					IndexOrder = member.HasAttribute<IndexAttribute>() ? member.GetAttribute<IndexAttribute>().IndexOrder : 0,
 				});
 			}
 			return table;
@@ -86,46 +86,56 @@ namespace Extensions
 
 		public static string CreateTableQuery(this Table table)
 		{
-			var queryBuilder = new StringBuilder();
-			queryBuilder.AppendLine("CREATE TABLE `{0}`".With(table.Name));
-			queryBuilder.AppendLine("(");
-			foreach (var column in table.ColumnList)
-			{
-				queryBuilder.AppendLine(
-					"\t`{ColumnName}` {Type} {Null} {AutoInc},".WithVar(new
+			var queryCreateTable = @"
+CREATE TABLE `{TableName}`
+(
+	{columnInfoList}
+	{primaryKeyInfo}
+	{indexInfo}
+);
+";
+			#region ColumnInfo
+			var columnInfoList = table.ColumnList
+				.Select(column => "`{ColumnName}` {Type} {Null} {AutoInc}".WithVar(new
 					{
-						ColumnName = column.Name,
+						ColumnName = column.Name.ToCamelCase(),
 						Type = column.SqlType,
 						Null = column.IsNull ? "NULL" : "NOT NULL",
 						AutoInc = column.IsAutoIncrementKey ? "AUTO_INCREMENT" : "",
+					}))
+				.StringJoin(",\n\t");
+			#endregion
+
+			#region PrimaryKey
+			var primaryKeyInfo = !table.ColumnList.Where(x => x.IsKey).Any() ? string.Empty :
+				", PRIMARY KEY ({0})".With(table.ColumnList
+				.Where(x => x.IsKey)
+				.Select(x => "`{0}`".With(x.Name.ToCamelCase()))
+				.StringJoin(", "));
+			#endregion
+
+			#region IndexInfo
+			var indexInfo1 = table.ColumnList
+				.Where(x => x.IsIndex && x.IndexId == 0)
+				.Select(x => "INDEX Index_{TableName}_{ColumnName} (`{ColumnName}`)".WithVar(new
+					{
+						TableName = table.Name,
+						ColumnName = x.Name,
 					}));
-					/*
-						elem.Name,
-						elem.IsVarchar ? "NVARCHAR({0})".With(elem.VarcharLength) : elem.Type,
-						elem.IsNull ? " NULL " : " NOT NULL ",
-						elem.IsAutoIncrementKey ? " AUTO_INCREMENT " : "",
-						",",
-						Environment.NewLine));
-				*/
-			}
-			if (table.ColumnList.Where(e => e.IsKey).Count() > 0)
-			{
-				queryBuilder.AppendLine(string.Format("\tPRIMARY KEY ({0})",
-					table.ColumnList.Where(e => e.IsKey).Select(e => "`{0}`".With(e.Name)).StringJoin(", ")));
-			}
+			var indexInfo2 = table.ColumnList
+				.Where(x => x.IsIndex && x.IndexId != 0)
+				.GroupBy(x => x.IndexId)
+				.Select(x => "INDEX Index_{TableName}_{ColumnNames1} ({ColumnNames2})".WithVar(new
+					{
+						TableName = table.Name,
+						ColumnNames1 = x.Select(e => e.Name).StringJoin("_"),
+						ColumnNames2 = x.OrderBy(e => e.IndexOrder).Select(e => "`{0}`".With(e.Name)).StringJoin(", "),
+					}));
+			var indexInfo = (indexInfo1.Concat(indexInfo2).Any() ? ", " : "") + indexInfo1.Concat(indexInfo2)
+				.StringJoin(",\n\t");
+			#endregion
 
-			foreach (var elem in table.ColumnList.Where(e => e.IsIndex))
-			{
-				queryBuilder.AppendLine(
-					string.Format(",{0}\tINDEX Index_{1}_{2} ({2})",
-						Environment.NewLine,
-						table.Name,
-						elem.Name));
-			}
-
-			queryBuilder.AppendLine(Environment.NewLine + ")");
-
-			return queryBuilder.ToString();
+			return queryCreateTable.WithVar(new { TableName = table.Name, columnInfoList, primaryKeyInfo, indexInfo });
 		}
 	}
 }
