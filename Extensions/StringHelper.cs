@@ -104,5 +104,12 @@ namespace Extensions
 		{
 			return value.ToLower() == "true";
 		}
+
+		public static string ToCamelCase(this string value)
+		{
+			if (value[0] >= 'A' && value[0] <= 'Z')
+				value = value.Substring(0, 1).ToLower() + value.Substring(1);
+			return value;
+		}
 	}
 }
