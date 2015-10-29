@@ -64,7 +64,7 @@ namespace Extensions
 			if (!typeInfo.HasAttribute<TableAttribute>())
 				return null;
 
-			var table = new Table { Name = typeInfo.GetAttribute<TableAttribute>() != null ? typeInfo.GetAttribute<TableAttribute>().TableName : typeInfo.Name };
+			var table = new Table { Name = typeInfo.GetAttribute<TableAttribute>().TableName != null ? typeInfo.GetAttribute<TableAttribute>().TableName : typeInfo.Name };
 			foreach (var member in typeInfo.GetFields())
 			{
 				table.ColumnList.Add(new Column()
