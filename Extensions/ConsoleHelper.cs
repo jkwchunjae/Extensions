@@ -38,9 +38,16 @@ namespace Extensions
 				"[{1}] {0}".With(tuple.Item1, tuple.Item2).Dump();
 		}
 
-		public static void Dump<T>(this IEnumerable<T> objList) where T : IGetString
+		public static void Dump<T>(this IEnumerable<T> objList, string title = null) where T : IGetString
 		{
-			typeof(T).Name.Dump();
+			if (title == null)
+			{
+				typeof(T).Name.Dump();
+			}
+			else
+			{
+				title.Dump();
+			}
 			foreach (var tuple in objList.Select((x, i) => Tuple.Create(x.GetString(), i)))
 				"[{1}] {0}".With(tuple.Item1, tuple.Item2).Dump();
 		}
