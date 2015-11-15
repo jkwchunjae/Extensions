@@ -18,6 +18,18 @@ namespace Extensions
 			return new DateTime(value / 10000, (value / 100) % 100, value % 100);
 		}
 
+		/// <summary> yyyymmdd hhmmss 형태의 str 을 DateTime으로 변환한다.  </summary>
+		public static DateTime ToDateTime(this string str)
+		{
+			return new DateTime(
+				str.Substring(0, 4).ToInt(),
+				str.Substring(4, 2).ToInt(),
+				str.Substring(6, 2).ToInt(),
+				str.Substring(9, 2).ToInt(),
+				str.Substring(11, 2).ToInt(),
+				str.Substring(13, 2).ToInt());
+		}
+
 		public static int ToInt(this DateTime date)
 		{
 			return date.Year * 10000 + date.Month * 100 + date.Day;
