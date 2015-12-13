@@ -10,12 +10,36 @@ namespace Extensions
 	{
 		public static DateTime ToDate(this string str)
 		{
-			return new DateTime(str.Substring(0, 4).ToInt(), str.Substring(4, 2).ToInt(), str.Substring(6, 2).ToInt());
+			return str.ToDate(DateTime.MinValue);
+		}
+
+		public static DateTime ToDate(this string str, DateTime defaultDate)
+		{
+			try
+			{
+				return str.ToInt().ToDate(defaultDate);
+			}
+			catch
+			{
+				return defaultDate;
+			}
 		}
 
 		public static DateTime ToDate(this int value)
 		{
-			return new DateTime(value / 10000, (value / 100) % 100, value % 100);
+			return value.ToDate(DateTime.MinValue);
+		}
+
+		public static DateTime ToDate(this int value, DateTime defaultDate)
+		{
+			try
+			{
+				return new DateTime(value / 10000, (value / 100) % 100, value % 100);
+			}
+			catch
+			{
+				return defaultDate;
+			}
 		}
 
 		/// <summary> yyyymmdd hhmmss 형태의 str 을 DateTime으로 변환한다.  </summary>
