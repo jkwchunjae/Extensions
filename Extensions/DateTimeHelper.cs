@@ -6,6 +6,19 @@ using System.Threading.Tasks;
 
 namespace Extensions
 {
+	public enum DateLanguage
+	{
+		KR, EN
+	}
+
+	public enum WeekdayFormat
+	{
+		/// <summary> 월, Mon </summary>
+		D,
+		/// <summary> 월요일, Monday </summary>
+		DDD,
+	}
+
 	public static class DateTimeHelper
 	{
 		public static DateTime ToDate(this string str)
@@ -57,6 +70,33 @@ namespace Extensions
 		public static int ToInt(this DateTime date)
 		{
 			return date.Year * 10000 + date.Month * 100 + date.Day;
+		}
+
+		public static string GetWeekday(this DateTime date, DateLanguage lang, WeekdayFormat format)
+		{
+			switch (lang)
+			{
+				case DateLanguage.KR:
+					var dayKr = "일월화수목금토".Substring(date.DayOfWeek.ToString("d").ToInt(), 1);
+					switch (format)
+					{
+						case WeekdayFormat.D:
+							return dayKr;
+						case WeekdayFormat.DDD:
+							return dayKr + "요일";
+					}
+					break;
+				case DateLanguage.EN:
+					switch (format)
+					{
+						case WeekdayFormat.D:
+							return date.DayOfWeek.ToString("f").Substring(0, 3);
+						case WeekdayFormat.DDD:
+							return date.DayOfWeek.ToString("f");
+					}
+					break;
+			}
+			return string.Empty;
 		}
 
 		public static int AddDays(this int date, int days)
