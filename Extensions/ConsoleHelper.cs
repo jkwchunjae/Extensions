@@ -19,7 +19,7 @@ namespace Extensions
 			return Console.ReadLine();
 		}
 
-		public static void Dump(this string value, string title = "")
+		public static string Dump(this string value, string title = "")
 		{
 			if (title == "")
 			{
@@ -29,16 +29,18 @@ namespace Extensions
 			{
 				Console.WriteLine(title + ": " + value);
 			}
+			return value;
 		}
 
-		public static void Dump(this IEnumerable<string> strList, string title = "")
+		public static IEnumerable<string> Dump(this IEnumerable<string> strList, string title = "")
 		{
 			title.Dump();
 			foreach (var tuple in strList.Select((x, i) => Tuple.Create(x, i)))
 				"[{1}] {0}".With(tuple.Item1, tuple.Item2).Dump();
+			return strList;
 		}
 
-		public static void Dump<T>(this IEnumerable<T> objList, string title = null) where T : IGetString
+		public static IEnumerable<T> Dump<T>(this IEnumerable<T> objList, string title = null) where T : IGetString
 		{
 			if (title == null)
 			{
@@ -50,6 +52,8 @@ namespace Extensions
 			}
 			foreach (var tuple in objList.Select((x, i) => Tuple.Create(x.GetString(), i)))
 				"[{1}] {0}".With(tuple.Item1, tuple.Item2).Dump();
+
+			return objList;
 		}
 	}
 }
