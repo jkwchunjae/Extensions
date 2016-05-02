@@ -92,6 +92,20 @@ namespace Extensions
 			return int.TryParse(value, out result);
 		}
 
+		public static long ToLong(this string value, long defaultValue = 0)
+		{
+			var result = defaultValue;
+			if (!long.TryParse(value, out result))
+				return defaultValue;
+			return result;
+		}
+
+		public static bool IsLong(this string value)
+		{
+			long result = 0;
+			return long.TryParse(value, out result);
+		}
+
 		public static double ToDouble(this string value, double defaultValue = 0)
 		{
 			var result = defaultValue;
