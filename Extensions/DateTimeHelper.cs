@@ -157,5 +157,10 @@ namespace Extensions
 		{
 			return date >= beginDate && date <= endDate;
 		}
+
+		public static TimeSpan ToTimeSpan(this long ticks)
+		{
+			return new TimeSpan(ticks);
+		}
 	}
 }
