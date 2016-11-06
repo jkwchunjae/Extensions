@@ -125,5 +125,10 @@ namespace Extensions
 				value = value.Substring(0, 1).ToLower() + value.Substring(1);
 			return value;
 		}
+
+		public static string Repeat(this string str, int repeatCount)
+		{
+			return Enumerable.Range(1, repeatCount).Select(x => str).StringJoin("");
+		}
 	}
 }
