@@ -58,6 +58,16 @@ namespace Extensions
 			return "{0}{1}{2}".With(left, strs.StringJoin(separator), right);
 		}
 
+		public static string StringJoin<T>(this IEnumerable<T> source, string separator)
+		{
+			return source.Select(x => x.ToString()).StringJoin(separator);
+		}
+
+		public static string StringJoin<T>(this IEnumerable<T> source, string left, string separator, string right)
+		{
+			return source.Select(x => x.ToString()).StringJoin(left, separator, right);
+		}
+
 		public static string RegexReplace(this string input, string pattern, string replacement)
 		{
 			if (input == null) return null;
