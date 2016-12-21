@@ -28,6 +28,21 @@ namespace Extensions
 	{
 		public static Random random = new Random((int)DateTime.Now.Ticks);
 
+		public static double Next()
+		{
+			return random.NextDouble();
+		}
+
+		public static double Next(double maxValue)
+		{
+			return random.NextDouble() * maxValue;
+		}
+
+		public static double Next(double minValue, double maxValue)
+		{
+			return random.NextDouble() * (maxValue - minValue) + minValue;
+		}
+
 		public static int Next(int maxValue)
 		{
 			return random.Next(maxValue);
