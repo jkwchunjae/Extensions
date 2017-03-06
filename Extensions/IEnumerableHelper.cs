@@ -17,5 +17,10 @@ namespace Extensions
 		{
 			return source.Select(x => new { Index = StaticRandom.Next(999999999), T = x }).OrderBy(x => x.Index).Select(x => x.T);
 		}
+
+		public static bool Empty<T>(this IEnumerable<T> source)
+		{
+			return !source.Any();
+		}
 	}
 }
