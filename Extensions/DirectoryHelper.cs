@@ -65,5 +65,15 @@ namespace Extensions
 		{
 			return new DirInfo(path);
 		}
+
+		public static bool IsValidFileName(this string filename)
+		{
+			return filename == filename.RemoveInvalidChar();
+		}
+
+		public static string RemoveInvalidChar(this string filename)
+		{
+			return filename.RegexReplace(@"(\\|\/|\:|\*|\?|\<|\>|\||\…)", "");
+		}
 	}
 }
