@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -21,6 +22,19 @@ namespace Extensions
 		public static bool Empty<T>(this IEnumerable<T> source)
 		{
 			return !source.Any();
+		}
+
+		public static string ToCsv<T>(this IEnumerable<T> source)
+		{
+			var t = typeof(T);
+			var props = t.GetProperties();
+
+			return source.Select(x => props.Select(e => e.PropertyType == typeof(DateTime) ? ((DateTime)e.GetValue(x)).ToString("yyyy-MM-dd HH:mm:ss") : e.GetValue(x)).StringJoin(",")).StringJoin("\n");
+		}
+
+		public static string ToJsonText<T>(this IEnumerable<T> source, Formatting formatting = Formatting.Indented)
+		{
+			return JsonConvert.SerializeObject(source, formatting);
 		}
 	}
 }
